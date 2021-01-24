@@ -36,7 +36,7 @@ class FileParser:
                         columns = []
                         stage = STAGE_SEARCHING
                     if stage == STAGE_READING:
-                        column = self.__parse_column_ddl(line.split())
+                        column = self.__parse_column_ddl(line.replace(', ', ',').split())
                         if column is not None:
                             columns.append(column)
                             if not line.endswith(',\n'):
@@ -55,7 +55,7 @@ class FileParser:
         if name_test.match(ddl[0]) is None:
             return None
 
-        type_test = re.compile("([a-z]+)(\(([0-9]+)\))?", re.IGNORECASE)
+        type_test = re.compile("([a-z]+)(\(([0-9,\s]+)\))?", re.IGNORECASE)
         type_match = type_test.match(ddl[1])
 
         if type_match is None:
@@ -63,11 +63,12 @@ class FileParser:
 
         name = ddl[0]
         type = type_match.group(1).lower()
-        type_argument = type_match.group(3)
+        raw_type_arguments = type_match.group(3)
+        type_arguments = raw_type_arguments.split(',') if raw_type_arguments is not None else []
 
         if type not in SUPPORTED_TYPES:
             print('UNSUPPORTED', type)
             return None
 
-        data_generator = self.factory.create(type, type_argument)
+        data_generator = self.factory.create(type, type_arguments)
         return Column(name, data_generator, False)

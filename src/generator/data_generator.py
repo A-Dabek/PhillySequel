@@ -1,3 +1,3 @@
 class DataGenerator:
-    def generate(self):
+    def generate(self, *args):
         return None
