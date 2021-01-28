@@ -23,7 +23,7 @@ class Column:
             return None
 
         name = ddl_words[0]
-        nullable = ddl.find("not null") == -1
+        required = ddl.find("not null") >= 0
         column_type = type_match.group(1).lower()
         raw_type_arguments = type_match.group(3)
         type_arguments = raw_type_arguments.split(',') if raw_type_arguments is not None else []
@@ -32,7 +32,7 @@ class Column:
             print('UNSUPPORTED', column_type)
             return None
 
-        return Column(name, column_type, type_arguments, False)
+        return Column(name, column_type, type_arguments, required)
 
     def __init__(self, name: str, column_type: str, type_arguments: List[str], required: bool):
         self.name = name

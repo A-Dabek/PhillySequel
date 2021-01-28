@@ -5,11 +5,11 @@ from generator.uuid_generator import UUIDGenerator
 from generator.varchar_generator import VarcharGenerator
 
 GENERATORS = {
+    'boolean': BooleanGenerator,
+    'uuid': UUIDGenerator,
     # 'varchar': VarcharGenerator,
-    # 'uuid': UUIDGenerator,
     # 'numeric': NumericGenerator,
     # 'date': DateGenerator,
-    'boolean': BooleanGenerator
 }
 
 SUPPORTED_TYPES = GENERATORS.keys()

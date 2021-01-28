@@ -7,7 +7,7 @@ create table financial_loss_risk
     loss            numeric(19, 2),
     proceeding_cost numeric(19, 2),
     isActive        boolean,
-    isActive2       boolean
+    isActive2 boolean not null
 );
 
 alter table financial_loss_risk

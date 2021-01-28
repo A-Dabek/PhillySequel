@@ -10,7 +10,7 @@ class ConfigurationProvider:
         self.default_configuration = {
             'boolean': {
                 'odds': 0.5
-            }
+            },
         }
         self.custom_configuration = {
             'financial_loss_risk': {
@@ -23,23 +23,28 @@ class ConfigurationProvider:
     def provide(self, relation: str, column: Column) -> dict:
         if column.required is False:
             column.nullability = self._resolve_nullability(relation, column)
-        if column.column_type == 'boolean':
-            return self._config(relation, column)
+        return self._config(relation, column)
 
-    def _resolve_nullability(self, relation: str, column: Column):
+    def _resolve_nullability(self, relation: str, column: Column) -> float:
         try:
-            return self.custom_configuration.get(relation).get(column.name)
-        except AttributeError:
+            return self.custom_configuration[relation][column.name][self.nullability_key]
+        except KeyError:
             pass
         try:
-            return self.default_configuration.get('boolean')[self.nullability_key]
-        except AttributeError:
+            return self.default_configuration['boolean'][self.nullability_key]
+        except KeyError:
             pass
         try:
-            return self.global_configuration.get(self.nullability_key)
-        except AttributeError:
+            return self.global_configuration[self.nullability_key]
+        except KeyError:
             return 0
 
-    def _config(self, relation: str, column: Column):
-        custom_config = self.custom_configuration.get(relation, dict()).get(column.name, dict())
-        return self.default_configuration.get(column.column_type) | custom_config
+    def _config(self, relation: str, column: Column) -> dict:
+        try:
+            custom_config = self.custom_configuration[relation][column.name]
+        except KeyError:
+            custom_config = dict()
+        try:
+            return self.default_configuration[column.column_type] | custom_config
+        except KeyError:
+            return custom_config
