@@ -1,15 +1,10 @@
 import re
-from typing import List, Optional
+from typing import List
 
-from generator import SUPPORTED_TYPES
-from generator.factory import GeneratorFactory
 from model import Relation, Column
 
 
 class FileParser:
-    def __init__(self):
-        self.factory = GeneratorFactory()
-
     def parse(self, filepath: str) -> List[Relation]:
         relations = []
         definition_start_regex = re.compile("create table ([a-z0-9_]+)", re.IGNORECASE)
@@ -36,7 +31,7 @@ class FileParser:
                         columns = []
                         stage = STAGE_SEARCHING
                     if stage == STAGE_READING:
-                        column = self.__parse_column_ddl(line.replace(', ', ',').split())
+                        column = Column.parse(line.replace(', ', ',').split())
                         if column is not None:
                             columns.append(column)
                             if not line.endswith(',\n'):
@@ -46,29 +41,3 @@ class FileParser:
                             stage = STAGE_READING
                 line = file.readline()
         return relations
-
-    def __parse_column_ddl(self, ddl: List[str]) -> Optional[Column]:
-        if len(ddl) < 2:
-            return None
-
-        name_test = re.compile("[a-z0-9_]+", re.IGNORECASE)
-        if name_test.match(ddl[0]) is None:
-            return None
-
-        type_test = re.compile("([a-z]+)(\(([0-9,\s]+)\))?", re.IGNORECASE)
-        type_match = type_test.match(ddl[1])
-
-        if type_match is None:
-            return None
-
-        name = ddl[0]
-        type = type_match.group(1).lower()
-        raw_type_arguments = type_match.group(3)
-        type_arguments = raw_type_arguments.split(',') if raw_type_arguments is not None else []
-
-        if type not in SUPPORTED_TYPES:
-            print('UNSUPPORTED', type)
-            return None
-
-        data_generator = self.factory.create(type, type_arguments)
-        return Column(name, data_generator, False)

@@ -5,7 +5,9 @@ create table financial_loss_risk
             primary key,
     interest        numeric(19, 2),
     loss            numeric(19, 2),
-    proceeding_cost numeric(19, 2)
+    proceeding_cost numeric(19, 2),
+    isActive        boolean,
+    isActive2       boolean
 );
 
 alter table financial_loss_risk

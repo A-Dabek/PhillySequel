@@ -1,3 +1,5 @@
 class DataGenerator:
-    def generate(self, *args):
+    nullability = 0
+
+    def generate(self):
         return None
