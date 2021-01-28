@@ -19,7 +19,7 @@ class GeneratorFactory:
             }
         if column_type == 'numeric':
             return {
-                'size': type_arguments[0],
-                'precision': type_arguments[1]
+                'size': int(type_arguments[0]),
+                'precision': int(type_arguments[1])
             }
         return {}

@@ -7,8 +7,8 @@ from generator.varchar_generator import VarcharGenerator
 GENERATORS = {
     'boolean': BooleanGenerator,
     'uuid': UUIDGenerator,
+    'numeric': NumericGenerator,
     # 'varchar': VarcharGenerator,
-    # 'numeric': NumericGenerator,
     # 'date': DateGenerator,
 }
 
