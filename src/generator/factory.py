@@ -7,17 +7,17 @@ from model import Column
 
 class GeneratorFactory:
     def create(self, column: Column, configuration: dict) -> DataGenerator:
-        sql_configuration = self._parse_type_arguments(column.type, column.type_arguments) \
+        sql_configuration = self._parse_type_arguments(column.column_type, column.type_arguments) \
             if len(column.type_arguments) > 0 \
             else dict()
-        return GENERATORS[column.type](**(sql_configuration | configuration))
+        return GENERATORS[column.column_type](**(sql_configuration | configuration))
 
-    def _parse_type_arguments(self, type: str, type_arguments: List[str]) -> dict:
-        if type in ['varchar', 'char']:
+    def _parse_type_arguments(self, column_type: str, type_arguments: List[str]) -> dict:
+        if column_type in ['varchar', 'char']:
             return {
                 'size': type_arguments[0]
             }
-        if type == 'numeric':
+        if column_type == 'numeric':
             return {
                 'size': type_arguments[0],
                 'precision': type_arguments[1]

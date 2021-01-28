@@ -1,6 +1,4 @@
-from typing import List
-
-from model import Relation, Column
+from model import Column
 
 
 class ConfigurationProvider:
@@ -25,7 +23,7 @@ class ConfigurationProvider:
     def provide(self, relation: str, column: Column) -> dict:
         if column.required is False:
             column.nullability = self._resolve_nullability(relation, column)
-        if column.type == 'boolean':
+        if column.column_type == 'boolean':
             return self._config(relation, column)
 
     def _resolve_nullability(self, relation: str, column: Column):
@@ -44,4 +42,4 @@ class ConfigurationProvider:
 
     def _config(self, relation: str, column: Column):
         custom_config = self.custom_configuration.get(relation, dict()).get(column.name, dict())
-        return self.default_configuration.get(column.type) | custom_config
+        return self.default_configuration.get(column.column_type) | custom_config

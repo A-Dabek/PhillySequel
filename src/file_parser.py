@@ -31,7 +31,7 @@ class FileParser:
                         columns = []
                         stage = STAGE_SEARCHING
                     if stage == STAGE_READING:
-                        column = Column.parse(line.replace(', ', ',').split())
+                        column = Column.parse(line.replace(', ', ','))
                         if column is not None:
                             columns.append(column)
                             if not line.endswith(',\n'):
