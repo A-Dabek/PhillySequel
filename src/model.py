@@ -2,6 +2,7 @@ import re
 from typing import List, Optional
 
 from generator import SUPPORTED_TYPES
+from generator.data_generator import DataGenerator
 
 
 class Column:
@@ -39,11 +40,12 @@ class Column:
         self.column_type = column_type
         self.type_arguments = type_arguments
         self.required = required
-        self.nullability = 0
+        self.nullability: float = 0
+        self.generator: DataGenerator = None
 
 
 class Relation:
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
-        self.columns = []
-        self.size = 1
+        self.columns: List[Column] = []
+        self.size: int = 1

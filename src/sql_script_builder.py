@@ -1,7 +1,9 @@
 import functools
 from typing import List
 
-from model import Relation
+from generator.data_generator import DataGenerator
+from generator.nullable_generator import NullableGenerator
+from model import Relation, Column
 
 
 class SqlScriptBuilder:
@@ -10,11 +12,14 @@ class SqlScriptBuilder:
         for r in relations:
             column_names = functools.reduce(self._concat, map(lambda x: x.name, r.columns))
             insert_clause = f'insert into {r.name} ({column_names}) values'
-            generators = list(map(lambda x: x.generator.generate(), r.columns))
+            generators = list(map(self._get_generator, r.columns))
             print(f'size {r.size}')
             for i in range(0, r.size):
-                column_values = functools.reduce(self._concat, generators)
+                column_values = functools.reduce(self._concat, map(lambda g: g.generate(), generators))
                 print(f'{insert_clause} ({column_values})')
 
-    def _concat(self, x, y):
+    def _concat(self, x: str, y: str) -> str:
         return f'{x}, {y}'
+
+    def _get_generator(self, c: Column) -> DataGenerator:
+        return c.generator if c.required else NullableGenerator(c.nullability, c.generator)
