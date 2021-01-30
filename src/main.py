@@ -22,7 +22,7 @@ def parse() -> List[Relation]:
 def configure(relations: List[Relation]):
     for relation in relations:
         for column in relation.columns:
-            config = configuration_provider.provide(relation.name, column)
+            config = configuration_provider.provide(relation, column)
             column.generator = generator_factory.create(column, config)
 
 

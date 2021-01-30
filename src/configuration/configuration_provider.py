@@ -1,11 +1,13 @@
-from model import Column
+from model import Column, Relation
 
 
 class ConfigurationProvider:
     def __init__(self):
-        self.nullability_key = 'nullability'
+        self.key_nullability = 'nullability'
+        self.key_size = 'size'
         self.global_configuration = {
-            self.nullability_key: 0.5
+            self.key_nullability: 0.5,
+            self.key_size: 2,
         }
         self.default_configuration = {
             'boolean': {
@@ -14,28 +16,40 @@ class ConfigurationProvider:
         }
         self.custom_configuration = {
             'financial_loss_risk': {
+                'size': 3,
                 'isActive': {
                     'odds': 0.6
-                }
+                },
             }
         }
 
-    def provide(self, relation: str, column: Column) -> dict:
+    def provide(self, relation: Relation, column: Column) -> dict:
+        relation.size = self._resolve_size(relation.name)
         if column.required is False:
-            column.nullability = self._resolve_nullability(relation, column)
-        return self._config(relation, column)
+            column.nullability = self._resolve_nullability(relation.name, column)
+        return self._config(relation.name, column)
+
+    def _resolve_size(self, relation: str) -> float:
+        try:
+            return self.custom_configuration[relation][self.key_size]
+        except KeyError:
+            pass
+        try:
+            return self.global_configuration[self.key_size]
+        except KeyError:
+            return 1
 
     def _resolve_nullability(self, relation: str, column: Column) -> float:
         try:
-            return self.custom_configuration[relation][column.name][self.nullability_key]
+            return self.custom_configuration[relation][column.name][self.key_nullability]
         except KeyError:
             pass
         try:
-            return self.default_configuration['boolean'][self.nullability_key]
+            return self.default_configuration['boolean'][self.key_nullability]
         except KeyError:
             pass
         try:
-            return self.global_configuration[self.nullability_key]
+            return self.global_configuration[self.key_nullability]
         except KeyError:
             return 0
 

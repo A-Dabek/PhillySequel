@@ -46,3 +46,4 @@ class Relation:
     def __init__(self, name):
         self.name = name
         self.columns = []
+        self.size = 1
