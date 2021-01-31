@@ -21,7 +21,7 @@ def parse() -> List[Relation]:
 @performance
 def configure(relations: List[Relation]):
     for relation in relations:
-        for column in relation.columns:
+        for column in relation.columns.values():
             config = configuration_provider.provide(relation, column)
             column.generator = generator_factory.create(column, config)
 

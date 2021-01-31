@@ -1,6 +1,6 @@
 create table financial_loss_risk
 (
-    id              uuid not null
+    id        uuid    not null
         constraint financial_loss_risk_pkey
             primary key,
     interest        numeric(19, 2),
@@ -10,9 +10,6 @@ create table financial_loss_risk
     isActive2 boolean not null
 );
 
-alter table financial_loss_risk
-    owner to postgres;
-
 create table initiation_type
 (
     id   uuid not null
@@ -21,26 +18,21 @@ create table initiation_type
     name varchar(255)
 );
 
-
-alter table judgment_content
-    owner to postgres;
-
 create table cassation_appeal
 (
-    id                            uuid not null
+    id                     uuid not null
         constraint cassation_appeal_pkey
             primary key,
-    interest                      numeric(19, 2),
-    judgment_date                 date,
-    payment_due                   numeric(19, 2),
-    proceeding_cost               numeric(19, 2),
-    judgment_content_id           uuid
+    interest               numeric(19, 2),
+    judgment_date          date,
+    payment_due            numeric(19, 2),
+    proceeding_cost        numeric(19, 2)
         constraint fktmyi4rw0ijoix1yr8jnsgtulv
-            references judgment_content,
-    judgment_evaluation_id        uuid
+            references financial_loss_risk (loss),
+    judgment_content_id    uuid
+        constraint fktmyi4rw0ijoix1yr8jnsgtulv
+            references financial_loss_risk,
+    judgment_evaluation_id uuid
         constraint fkosahw20lnfejca66jaa43o8j7
-            references cassation_appeal_judgment_evaluation,
-    cassation_appeal_statement_id uuid
-        constraint fkdnqnc6c6529vri1mem79qb140
-            references cassation_appeal_statement
+            references initiation_type
 );
