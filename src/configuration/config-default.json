@@ -1,0 +1,15 @@
+{
+  "boolean": {
+    "odds": 0.5
+  },
+  "numeric": {
+    "max_size": null,
+    "max_precision": null,
+    "negatives": false
+  },
+  "varchar": {
+    "word_bank": "english",
+    "max_size": null,
+    "max_word_count": null
+  }
+}
