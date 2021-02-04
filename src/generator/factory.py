@@ -15,7 +15,7 @@ class GeneratorFactory:
     def _parse_type_arguments(self, column_type: str, type_arguments: List[str]) -> dict:
         if column_type in ['varchar', 'char']:
             return {
-                'size': type_arguments[0]
+                'size': int(type_arguments[0])
             }
         if column_type == 'numeric':
             return {

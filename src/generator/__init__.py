@@ -8,7 +8,7 @@ GENERATORS = {
     'boolean': BooleanGenerator,
     'uuid': UUIDGenerator,
     'numeric': NumericGenerator,
-    # 'varchar': VarcharGenerator,
+    'varchar': VarcharGenerator,
     # 'date': DateGenerator,
 }
 
