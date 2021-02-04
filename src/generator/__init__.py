@@ -9,7 +9,7 @@ GENERATORS = {
     'uuid': UUIDGenerator,
     'numeric': NumericGenerator,
     'varchar': VarcharGenerator,
-    # 'date': DateGenerator,
+    'date': DateGenerator,
 }
 
 SUPPORTED_TYPES = GENERATORS.keys()

@@ -11,5 +11,11 @@
     "word_bank": "english",
     "max_size": null,
     "max_word_count": null
+  },
+  "date": {
+    "min_date": null,
+    "max_date": null,
+    "future": true,
+    "past": true
   }
 }

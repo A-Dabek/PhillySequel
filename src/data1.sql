@@ -1,13 +1,14 @@
 create table financial_loss_risk
 (
-    id        uuid    not null
+    id              uuid    not null
         constraint financial_loss_risk_pkey
             primary key,
+    judgment_date   date,
     interest        numeric(19, 2),
     loss            numeric(19, 2),
     proceeding_cost numeric(19, 2),
     isActive        boolean,
-    isActive2 boolean not null
+    isActive2       boolean not null
 );
 
 create table initiation_type

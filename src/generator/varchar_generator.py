@@ -23,4 +23,4 @@ class VarcharGenerator(DataGenerator):
                     break
             if len(words) > 0 and random.random() > 0.75:
                 break
-        return ' '.join(words)
+        return f"'{' '.join(words)}'"

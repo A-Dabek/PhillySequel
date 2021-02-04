@@ -1,8 +1,11 @@
-from model import Column, Relation
 import json
+from datetime import datetime
+from typing import Optional
+
+from model import Column, Relation
 
 KEY_NULLABILITY = 'nullability'
-KEY_SIZE = 'size'
+KEY_COUNT = 'count'
 
 
 class ConfigurationProvider:
@@ -12,21 +15,23 @@ class ConfigurationProvider:
         self.custom_configuration = json.load(open('./configuration/config.json'))
 
     def provide(self, relation: Relation, column: Column) -> dict:
-        relation.size = self._resolve_size(relation.name)
+        relation.count = self._resolve_count(relation.name)
         if column.required is False:
             column.nullability = self._resolve_nullability(relation.name, column)
         raw_config = self._config(relation.name, column)
         if column.column_type == 'varchar':
             return self._parse_varchar_config(raw_config)
+        if column.column_type == 'date':
+            return self._parse_date_config(raw_config)
         return raw_config
 
-    def _resolve_size(self, relation: str) -> float:
+    def _resolve_count(self, relation: str) -> int:
         try:
-            return self.custom_configuration[relation][KEY_SIZE]
+            return self.custom_configuration[relation][KEY_COUNT]
         except KeyError:
             pass
         try:
-            return self.global_configuration[KEY_SIZE]
+            return self.global_configuration[KEY_COUNT]
         except KeyError:
             return 1
 
@@ -65,3 +70,36 @@ class ConfigurationProvider:
                 words.append(line.rstrip('\n'))
                 line = file.readline()
         return words
+
+    def _parse_date_config(self, config: dict) -> dict:
+        config = {
+            'min_date': self._resolve_min_date(config.get('min_date'), config.get('past')),
+            'max_date': self._resolve_max_date(config.get('max_date'), config.get('future')),
+        }
+        return config
+
+    def _resolve_min_date(self, min_date: Optional[str], past: bool) -> datetime:
+        date_format = '%Y-%m-%d'
+        today = datetime.today()
+        century_before = today.replace(year=today.year - 100)
+        if past:
+            if min_date:
+                minimum = datetime.strptime(min_date, date_format)
+                return min(minimum, today)
+            else:
+                return century_before
+        else:
+            return today
+
+    def _resolve_max_date(self, max_date: Optional[str], future: bool) -> datetime:
+        date_format = '%Y-%m-%d'
+        today = datetime.today()
+        century_after = today.replace(year=today.year + 100)
+        if future:
+            if max_date:
+                maximum = datetime.strptime(max_date, date_format)
+                return max(maximum, today)
+            else:
+                return century_after
+        else:
+            return today

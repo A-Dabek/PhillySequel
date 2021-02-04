@@ -1,6 +1,6 @@
 import random
-import numpy
 
+import numpy
 from generator.data_generator import DataGenerator
 
 
@@ -8,8 +8,6 @@ class NumericGenerator(DataGenerator):
     def __init__(self, size=1, max_size=None, precision=0, max_precision=None, negatives=True):
         self.maxsize = max_size if max_size else size
         self.precision = precision
-        self.mean = 0
-        self.std = 0.39
         self.negatives = negatives
 
     def generate(self):

@@ -13,7 +13,7 @@ class SqlScriptBuilder:
             column_names = functools.reduce(self._concat, map(lambda x: x.name, r.columns.values()))
             insert_clause = f'insert into {r.name} ({column_names}) values'
             generators = list(map(self._get_generator, r.columns.values()))
-            for i in range(0, r.size):
+            for i in range(0, r.count):
                 column_values = functools.reduce(self._concat, map(lambda g: g.generate(), generators))
                 print(f'{insert_clause} ({column_values})')
 

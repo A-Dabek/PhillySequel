@@ -65,7 +65,7 @@ class Relation:
     def __init__(self, name: str):
         self.name = name
         self.columns: dict[str, Column] = dict()
-        self.size: int = 1
+        self.count: int = 1
 
     @property
     def primary_key(self):

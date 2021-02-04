@@ -1,20 +1,17 @@
-import random
-import datetime
+from datetime import datetime
 
+import numpy
 from generator.data_generator import DataGenerator
 
 
 class DateGenerator(DataGenerator):
-    def __init__(self, args):
-        pass
+    def __init__(self, min_date: datetime, max_date: datetime):
+        self.min_date = min_date
+        self.max_date = max_date
 
     def generate(self):
-        return self.randomtimes('1900-01-01', '3000-01-01')
-
-    def randomtimes(self, start, end):
-        frmt = '%Y-%m-%d'
-        stime = datetime.datetime.strptime(start, frmt)
-        etime = datetime.datetime.strptime(end, frmt)
-        time_delta = etime - stime
-        random_date = (random.random() * time_delta + stime).strftime(frmt)
+        date_format = '%Y-%m-%d'
+        random_factor = abs(numpy.random.normal(loc=0, scale=0.39))
+        time_delta = self.max_date - self.min_date
+        random_date = (random_factor * time_delta + self.min_date).strftime(date_format)
         return f"'{random_date}'"
