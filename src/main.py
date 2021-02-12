@@ -14,8 +14,8 @@ builder = SqlScriptBuilder()
 
 
 @performance
-def parse() -> List[Relation]:
-    return parser.parse("data1.sql")
+def parse(filepath: str) -> List[Relation]:
+    return parser.parse(filepath)
 
 
 @performance
@@ -31,6 +31,6 @@ def generate(relations: List[Relation]):
     builder.generate(relations)
 
 
-relations = parse()
+relations = parse("data1.sql")
 configure(relations)
 generate(relations)

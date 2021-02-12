@@ -15,7 +15,7 @@ class SqlScriptBuilder:
             generators = list(map(self._get_generator, r.columns.values()))
             for i in range(0, r.count):
                 column_values = functools.reduce(self._concat, map(lambda g: g.generate(), generators))
-                print(f'{insert_clause} ({column_values})')
+                print(f'{insert_clause} ({column_values});')
 
     def _concat(self, x: str, y: str) -> str:
         return f'{x}, {y}'

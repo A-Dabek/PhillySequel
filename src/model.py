@@ -15,7 +15,7 @@ class Column:
         # resolve name
         name = ddl_words[0]
         name_match = re.compile("[a-z0-9_]+", re.IGNORECASE).match(name)
-        if name_match is None:
+        if name_match is None or name in ['constraint']:
             return None
 
         # resolve type

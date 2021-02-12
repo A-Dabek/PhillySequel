@@ -21,7 +21,7 @@ class ConfigurationProvider:
         raw_config = self._config(relation.name, column)
         if column.column_type == 'varchar':
             return self._parse_varchar_config(raw_config)
-        if column.column_type == 'date':
+        if column.column_type in ['date', 'timestamp']:
             return self._parse_date_config(raw_config)
         return raw_config
 

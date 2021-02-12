@@ -17,5 +17,11 @@
     "max_date": null,
     "future": true,
     "past": true
+  },
+  "timestamp": {
+    "min_date": null,
+    "max_date": null,
+    "future": true,
+    "past": true
   }
 }

@@ -37,3 +37,14 @@ create table cassation_appeal
         constraint fkosahw20lnfejca66jaa43o8j7
             references initiation_type
 );
+
+create table rev_entity
+(
+    id        bigint not null
+        constraint rev_entity_pkey
+            primary key,
+    timestamp timestamp,
+    revtype   smallint,
+    constraint cassation_appeal_audit_pkey
+        primary key (id)
+);

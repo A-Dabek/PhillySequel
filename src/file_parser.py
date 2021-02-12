@@ -38,6 +38,7 @@ class FileParser:
                 else:
                     if definition_end_regex.search(line) is not None:
                         ddl_lines = re.split(',\n', ''.join(attribute_lines).replace(', ', ','))
+                        attribute_lines = []
                         columns_list = list(filter(lambda x: x is not None, map(lambda x: Column.parse(x), ddl_lines)))
                         self._resolve_foreign_keys(columns_list)
                         columns_dict = {c.name: c for c in columns_list}
